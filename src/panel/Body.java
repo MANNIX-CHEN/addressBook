@@ -1,5 +1,6 @@
 package panel;
 
+import component.GroupTable;
 import frame.MyFrame;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.awt.*;
 public class Body extends JSplitPane {
     GridBagConstraints gBody = new GridBagConstraints();
     MyFrame mainFrame;
-    JList<String> groupDeatail;//åˆ†ç»„è¯¦æƒ…ï¼Œæ­£å¼ç‰ˆéœ€è¦æ¢ç§åŸå‹ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼
+    //JList<String> groupDeatail;//·Ö×éÏêÇé£¬ÕıÊ½°æĞèÒª»»ÖÖÔ­ĞÍ£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡
     ContactDeatail contactDeatail ;
 
     int selectedID = 0;
@@ -18,9 +19,18 @@ public class Body extends JSplitPane {
     public Body(int orientation , MyFrame mainFrame){
         super(orientation);
         this.mainFrame = mainFrame;
+        //setSize(500,400);
+        //System.out.println(getSize());
+        setDividerLocation(0.7);
+        //getMyself().setLayout(new BorderLayout());
+
         this.init();
 
+
+
         setLayout();
+        System.out.println(getSize());
+        setDividerLocation(0.6);
     }
 
     public Body getMyself(){
@@ -28,6 +38,8 @@ public class Body extends JSplitPane {
     }
 
     private void setLayout() {
+        //Õâ¸öÊÇÉèÖÃÁË¸ÃbodyÔÚframeÀïÃæµÄ²¼¾Ö
+        //¶ø²»ÊÇÉèÖÃbodyÀïÃæµÄ²¼¾Ö
         gBody.gridx=4;
         gBody.gridy=2;
         gBody.gridheight = 5;
@@ -46,51 +58,37 @@ public class Body extends JSplitPane {
         this.setMinimumSize(new Dimension(600,500));
         this.setSize(new Dimension(600,500));
         //this.setVisible(true);
-        this.setDividerLocation(0.5);//æ”¾åœ¨è¿™é‡Œä¸èƒ½ç”¨ï¼Œéœ€è¦æ”¾åœ¨MyFrameé‡Œé¢
+        this.setDividerLocation(0.5);//·ÅÔÚÕâÀï²»ÄÜÓÃ£¬ĞèÒª·ÅÔÚMyFrameÀïÃæ
         this.setBackground(Color.BLUE);
-        this.setContinuousLayout(true);// æ‹–åŠ¨åˆ†éš”æ¡æ—¶è¿ç»­é‡ç»˜ç»„ä»¶
+        this.setContinuousLayout(true);// ÍÏ¶¯·Ö¸ôÌõÊ±Á¬ĞøÖØ»æ×é¼ş
 
 
-        //ä»¥ä¸‹ä¸ºåˆå§‹åŒ–ç‰ˆé¢
-        initGroupDeatial();//åˆå§‹åŒ–åˆ†ç»„è¯¦æƒ…ä¿¡æ¯
-        this.add(groupDeatail,this.leftComponent);//å‘é¡¶éƒ¨å­panelæ·»åŠ åˆ†ç»„è¯¦æƒ…ä¿¡æ¯
-        initContactDeatail();//åˆå§‹åŒ–è”ç³»äººè¯¦ç»†ä¿¡æ¯ç•Œé¢
-        this.add(contactDeatail,this.rightComponent);//å‘åº•éƒ¨å­panelæ·»åŠ è”ç³»äººè¯¦ç»†ä¿¡æ¯
+
+
+        GroupDeatail topPanel = new GroupDeatail(new BorderLayout());
+        this.setLeftComponent(topPanel);
+        //ÕâÀïÍ¨¹ıĞÂ½¨Ò»¸öpanel³ÉÎªbodyµÄtopPanel£¬ÕâÑùÔÚÕâ¸öĞÂpanel¿ÉÒÔ¸üºÃÉèÖÃµ÷ÊÔ
+
+        initContactDeatail();//³õÊ¼»¯ÁªÏµÈËÏêÏ¸ĞÅÏ¢½çÃæ
+        this.add(contactDeatail,this.rightComponent);//Ïòµ×²¿×ÓpanelÌí¼ÓÁªÏµÈËÏêÏ¸ĞÅÏ¢
         //System.out.println(this.getSize());
     }
 
     private void initContactDeatail() {
         contactDeatail = new ContactDeatail();
-        contactDeatail.demoMsg.setText("æˆ‘æ˜¯"+FindGroupDetail(1)[selectedID]);
+        contactDeatail.demoMsg.setText("ÎÒÊÇ"+FindGroupDetail(1)[selectedID]);
         contactDeatail.setBackground(Color.MAGENTA);
-    }
-
-    private void initGroupDeatial() {
-        //System.out.println(mainFrame.getGroup().getSelectedGroup());
-        groupDeatail = new JList<String>();
-        int groupID = mainFrame.getGroup().getSelectedGroup();
-        String[] groupDeatialString= FindGroupDetail(groupID);
-        groupDeatail.setListData(groupDeatialString);
-
-        groupDeatail.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                selectedID = groupDeatail.getSelectedIndex();
-                validate();
-            }
-        });
-
     }
 
     @Override
     public void validate() {
         super.validate();
-        contactDeatail.demoMsg.setText("æˆ‘æ˜¯"+FindGroupDetail(1)[selectedID]);
+        contactDeatail.demoMsg.setText("ÎÒÊÇ"+FindGroupDetail(1)[selectedID]);
     }
 
     private String[] FindGroupDetail(int GroupID){
-        //æ­£å¼ç‰ˆæœ¬è¿™é‡Œéœ€è¦å®Œå–„
-        return new String[]{"å°æ˜", "å°çº¢","å°å†›"};
+        //ÕıÊ½°æ±¾ÕâÀïĞèÒªÍêÉÆ
+        return new String[]{"Ğ¡Ã÷", "Ğ¡ºì","Ğ¡¾ü"};
     }
 
 
